@@ -12,190 +12,189 @@
 
 </div></h1>
 
-OSX (macOS) inside a Docker container.
+Bir Docker konteynerinin içindeki OSX (macOS).
 
-## Features ✨
+## Özellikler ✨
 
- - KVM acceleration
- - Web-based viewer
- - Automatic download
+- KVM hızlandırma
+- Web tabanlı görüntüleyici
+- Otomatik indirme
 
-## Usage  🐳
+## Kullanım 🐳
 
-Via Docker Compose:
+Docker Compose aracılığıyla:
 
 ```yaml
-services:
-  macos:
-    image: dockurr/macos
-    container_name: macos
-    environment:
-      VERSION: "13"
-    devices:
-      - /dev/kvm
-    cap_add:
-      - NET_ADMIN
-    ports:
-      - 8006:8006
-      - 5900:5900/tcp
-      - 5900:5900/udp
-    stop_grace_period: 2m
+hizmetler:
+macos:
+görüntü: dockurr/macos
+kapsayıcı_adı: macos
+ortam:
+SÜRÜM: "13"
+cihazlar:
+- /dev/kvm
+cap_add:
+- NET_ADMIN
+bağlantı noktaları:
+- 8006:8006
+- 5900:5900/tcp
+- 5900:5900/udp
+stop_grace_period: 2m
 ```
 
-Via Docker CLI:
+Docker CLI aracılığıyla:
 
 ```bash
 docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-timeout 120 dockurr/macos
 ```
 
-Via Kubernetes:
+Kubernetes Üzerinden:
 
 ```shell
 kubectl apply -f https://raw.githubusercontent.com/dockur/macos/refs/heads/master/kubernetes.yml
 ```
 
-## Compatibility ⚙️
+## Uyumluluk ⚙️
 
-| **Product**  | **Platform**   | |
+| **Ürün** | **Platform** | |
 |---|---|---|
-| Docker Engine | Linux| ✅ |
-| Docker Desktop | Linux | ❌ |
-| Docker Desktop | macOS | ❌ |
-| Docker Desktop | Windows 11 | ✅ |
-| Docker Desktop | Windows 10 | ❌ |
+| Docker Motoru | Linux| ✅ |
+| Docker Masaüstü | Linux | ❌ |
+| Docker Masaüstü | macOS | ❌ |
+| Docker Masaüstü | Windows 11 | ✅ |
+| Docker Masaüstü | Windows 10 | ❌ |
 
-## FAQ 💬
+## SSS 💬
 
-### How do I use it?
+### Nasıl kullanırım?
 
-  Very simple! These are the steps:
-  
-  - Start the container and connect to [port 8006](http://localhost:8006) using your web browser.
+Çok basit! İşte adımlar:
 
-  - Choose `Disk Utility` and then select the largest `Apple Inc. VirtIO Block Media` disk.
+- Konteyneri başlatın ve web tarayıcınızı kullanarak [port 8006](http://localhost:8006) adresine bağlanın.
 
-  - Click the `Erase` button to format the disk, and give it any recognizable name you like.
+- `Disk Utility` öğesini seçin ve ardından en büyük `Apple Inc. VirtIO Block Media` diskini seçin.
 
-  - Close the current window and proceed the installation by clicking `Reinstall macOS`.
-  
-  - When prompted where you want to install it, select the disk you just created previously.
- 
-  - After all files are copied, select your region, language, and account settings.
-  
-  Enjoy your brand new machine, and don't forget to star this repo!
+- Diski biçimlendirmek için `Erase` düğmesine tıklayın ve istediğiniz tanınabilir adı verin.
 
-### How do I select the macOS version?
+- Geçerli pencereyi kapatın ve `Reinstall macOS` öğesine tıklayarak yüklemeye devam edin.
 
-  By default, macOS 13 (Ventura) will be installed, as it offers the best performance.
-  
-  But you can add the `VERSION` environment variable to your compose file, in order to specify an alternative macOS version to be downloaded:
+- Nereye yüklemek istediğiniz sorulduğunda, daha önce oluşturduğunuz diski seçin.
 
-  ```yaml
-  environment:
-    VERSION: "13"
-  ```
+- Tüm dosyalar kopyalandıktan sonra bölgenizi, dilinizi ve hesap ayarlarınızı seçin.
 
-  Select from the values below:
-  
-  |   **Value** | **Version**    | **Name** |
-  |-------------|----------------|------------------|
-  | `15`        | macOS 15       | Sequoia          |
-  | `14`        | macOS 14       | Sonoma           |
-  | `13`        | macOS 13       | Ventura          |
-  | `12`        | macOS 12       | Monterey         |
-  | `11`        | macOS 11       | Big Sur          |
+Yepyeni makinenizin tadını çıkarın ve bu depoya yıldız eklemeyi unutmayın!
 
-### How do I change the storage location?
+### macOS sürümünü nasıl seçerim?
 
-  To change the storage location, include the following bind mount in your compose file:
+Varsayılan olarak, en iyi performansı sunduğu için macOS 13 (Ventura) yüklenecektir.
 
-  ```yaml
-  volumes:
-    - /var/osx:/storage
-  ```
+Ancak alternatif bir macOS sürümünü indirmek için compose dosyanıza `VERSION` ortam değişkenini ekleyebilirsiniz:
 
-  Replace the example path `/var/osx` with the desired storage folder.
+```yaml
+environment:
+VERSION: "13"
+```
 
-### How do I change the size of the disk?
+Aşağıdaki değerlerden birini seçin:
 
-  To expand the default size of 64 GB, add the `DISK_SIZE` setting to your compose file and set it to your preferred capacity:
+| **Değer** | **Sürüm** | **Ad** |
+|--------------|-----------------|------------------|
+| `15` | macOS 15 | Sequoia |
+| `14` | macOS 14 | Sonoma |
+| `13` | macOS 13 | Ventura |
+| `12` | macOS 12 | Monterey |
+| `11` | macOS 11 | Big Sur |
 
-  ```yaml
-  environment:
-    DISK_SIZE: "256G"
-  ```
-  
+### Depolama konumunu nasıl değiştiririm?
+
+Depolama konumunu değiştirmek için, compose dosyanıza aşağıdaki bağlama bağlantısını ekleyin:
+
+```yaml
+volumes:
+- /var/osx:/storage
+```
+
+Örnek yol `/var/osx`'u istediğiniz depolama klasörüyle değiştirin.
+
+### Diskin boyutunu nasıl değiştiririm?
+
+Varsayılan 64 GB boyutunu genişletmek için, compose dosyanıza `DISK_SIZE` ayarını ekleyin ve tercih ettiğiniz kapasiteye ayarlayın:
+
+```yaml
+environment:
+DISK_SIZE: "256G"
+```
+
 > [!TIP]
-> This can also be used to resize the existing disk to a larger capacity without any data loss.
+> Bu, herhangi bir veri kaybı olmadan mevcut diski daha büyük bir kapasiteye yeniden boyutlandırmak için de kullanılabilir.
 
-### How do I change the amount of CPU or RAM?
+### CPU veya RAM miktarını nasıl değiştiririm?
 
-  By default, the container will be allowed to use a maximum of 2 CPU cores and 4 GB of RAM.
+Varsayılan olarak, konteynerin en fazla 2 CPU çekirdeği ve 4 GB RAM kullanmasına izin verilir.
 
-  If you want to adjust this, you can specify the desired amount using the following environment variables:
+Bunu ayarlamak isterseniz, aşağıdaki ortam değişkenlerini kullanarak istediğiniz miktarı belirtebilirsiniz:
 
-  ```yaml
-  environment:
-    RAM_SIZE: "8G"
-    CPU_CORES: "4"
-  ```
+```yaml
+environment:
+RAM_SIZE: "8G"
+CPU_CORES: "4"
+```
 
-### How do I pass-through a USB device?
+### Bir USB aygıtını nasıl geçirebilirim?
 
-  To pass-through a USB device, first lookup its vendor and product id via the `lsusb` command, then add them to your compose file like this:
+Bir USB aygıtını geçirmek için, önce `lsusb` komutuyla satıcısını ve ürün kimliğini arayın, ardından bunları compose dosyanıza şu şekilde ekleyin:
 
-  ```yaml
-  environment:
-    ARGUMENTS: "-device usb-host,vendorid=0x1234,productid=0x1234"
-  devices:
-    - /dev/bus/usb
-  ```
+```yaml
+environment:
+ARGUMENTS: "-device usb-host,vendorid=0x1234,productid=0x1234"
+devices:
+- /dev/bus/usb
+```
 
-### How do I verify if my system supports KVM?
+### Sistemimin KVM'yi destekleyip desteklemediğini nasıl doğrulayabilirim?
 
-  Only Linux and Windows 11 support KVM virtualization, macOS and Windows 10 do not unfortunately.
-  
-  You can run the following commands in Linux to check your system:
+Yalnızca Linux ve Windows 11 KVM sanallaştırmayı destekler, macOS ve Windows 10 ne yazık ki desteklemez.
 
-  ```bash
-  sudo apt install cpu-checker
-  sudo kvm-ok
-  ```
+Sisteminizi kontrol etmek için Linux'ta aşağıdaki komutları çalıştırabilirsiniz:
 
-  If you receive an error from `kvm-ok` indicating that KVM cannot be used, please check whether:
+```bash
+sudo apt install cpu-checker
+sudo kvm-ok
+```
 
-  - the virtualization extensions (`Intel VT-x` or `AMD SVM`) are enabled in your BIOS.
+`kvm-ok` komutundan KVM kullanılamayacağını belirten bir hata alırsanız lütfen şunları kontrol edin:
 
-  - you enabled "nested virtualization" if you are running the container inside a virtual machine.
+- BIOS'unuzda sanallaştırma uzantıları (`Intel VT-x` veya `AMD SVM`) etkindir.
 
-  - you are not using a cloud provider, as most of them do not allow nested virtualization for their VPS's.
+- Konteyneri bir sanal makine içinde çalıştırıyorsanız "iç içe sanallaştırma"yı etkinleştirdiniz.
 
-  If you do not receive any error from `kvm-ok` but the container still complains about KVM, please check whether:
+- Bir bulut sağlayıcısı kullanmıyorsunuz çünkü çoğu VPS'leri için iç içe sanallaştırmaya izin vermiyor.
 
-  - you are not using "Docker Desktop for Linux" as it does not support KVM, instead make use of Docker Engine directly.
- 
-  - it could help to add `privileged: true` to your compose file (or `sudo` to your `docker run` command), to rule out any permission issue.
+`kvm-ok` komutundan herhangi bir hata almazsanız ancak konteyner hala KVM'den şikayet ediyorsa lütfen şunları kontrol edin:
 
-### How do I run Windows in a container?
+- KVM'yi desteklemediği için "Linux için Docker Desktop" kullanmıyorsunuz, bunun yerine doğrudan Docker Engine'i kullanın.
 
-  You can use [dockur/windows](https://github.com/dockur/windows) for that. It shares many of the same features, and even has completely automatic installation.
+- Herhangi bir izin talebini engellemek için `privileged: true` komutunu compose dosyanıza (veya `docker run` komutunuza `sudo` komutunu) eklemeniz yardımcı olabilir.
+  ### Windows'u bir kapsayıcıda nasıl çalıştırabilirim?
 
-### Is this project legal?
+Bunun için [dockur/windows](https://github.com/dockur/windows) kullanabilirsiniz. Birçok aynı özelliği paylaşır ve hatta tamamen otomatik yüklemeye sahiptir.
 
-  Yes, this project contains only open-source code and does not distribute any copyrighted material. Neither does it try to circumvent any copyright protection measures. So under all applicable laws, this project will be considered legal.
+### Bu proje yasal mı?
 
-  However, by installing Apple's macOS, you must accept their end-user license agreement, which does not permit installation on non-official hardware. So only run this container on hardware sold by Apple, as any other use will be a violation of their terms and conditions.
+Evet, bu proje yalnızca açık kaynaklı kod içerir ve telif hakkıyla korunan hiçbir materyal dağıtmaz. Ayrıca telif hakkı koruma önlemlerini atlatmaya da çalışmaz. Dolayısıyla, geçerli tüm yasalar uyarınca bu proje yasal kabul edilecektir.
 
- ## Acknowledgements 🙏
+Ancak, Apple'ın macOS'unu yükleyerek, resmi olmayan donanımlara yüklemeye izin vermeyen son kullanıcı lisans sözleşmesini kabul etmeniz gerekir. Bu nedenle, bu kapsayıcıyı yalnızca Apple tarafından satılan donanımlarda çalıştırın, aksi takdirde hüküm ve koşullarının ihlali anlamına gelir.
 
-Special thanks to [seitenca](https://github.com/seitenca), this project would not exist without her invaluable work.
+## Teşekkürler 🙏
 
-## Stars 🌟
-[![Stars](https://starchart.cc/dockur/macos.svg?variant=adaptive)](https://starchart.cc/dockur/macos)
+[seitenca](https://github.com/seitenca)'ya özel teşekkürler, bu proje onun paha biçilmez çalışmaları olmadan var olamazdı.
 
-## Disclaimer ⚖️
+## Yıldızlar 🌟
+[![Yıldızlar](https://starchart.cc/dockur/macos.svg?variant=adaptive)](https://starchart.cc/dockur/macos)
 
-*Only run this container on Apple hardware, any other use is not permitted by their EULA. The product names, logos, brands, and other trademarks referred to within this project are the property of their respective trademark holders. This project is not affiliated, sponsored, or endorsed by Apple Inc.*
+## Feragatname ⚖️
+
+*Bu kapsayıcıyı yalnızca Apple donanımında çalıştırın, başka herhangi bir kullanım EULA'ları tarafından izin verilmez. Bu projede atıfta bulunulan ürün adları, logolar, markalar ve diğer ticari markalar ilgili ticari marka sahiplerinin mülkiyetindedir. Bu proje Apple Inc. tarafından desteklenmemekte, desteklenmemekte veya onaylanmamaktadır.*
 
 [build_url]: https://github.com/dockur/macos/
 [hub_url]: https://hub.docker.com/r/dockurr/macos/
@@ -205,5 +204,5 @@ Special thanks to [seitenca](https://github.com/seitenca), this project would no
 [Build]: https://github.com/dockur/macos/actions/workflows/build.yml/badge.svg
 [Size]: https://img.shields.io/docker/image-size/dockurr/macos/latest?color=066da5&label=size
 [Pulls]: https://img.shields.io/docker/pulls/dockurr/macos.svg?style=flat&label=pulls&logo=docker
-[Version]: https://img.shields.io/docker/v/dockurr/macos/latest?arch=amd64&sort=semver&color=066da5
-[Package]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fipitio.github.io%2Fbackage%2Fdockur%2Fmacos%2Fmacos.json&query=%24.downloads&logo=github&style=flat&color=066da5&label=pulls
+[Sürüm]: https://img.shields.io/docker/v/dockurr/macos/latest?arch=amd64&sort=semver&color=066da5
+[Paket]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fipitio.github.io%2Fbackage%2Fdockur%2Fmacos%2Fmacos.json&query=%24.downloads&logo=github&style=flat&color=066da5&label=pulls
